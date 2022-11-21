@@ -1,0 +1,65 @@
+class Rational:
+    def __init__(self, nominator=1, denominator=1):
+        if not isinstance(nominator, int):
+            raise Exception("Numerator must be an integer")
+        if not isinstance(denominator, int):
+            raise Exception("Denominator must be an integer")
+        if denominator == 0:
+            raise Exception("Denominator cant be 0")
+        min_common_factor = min(nominator, denominator)
+        factor = 1
+        for i in range(1, min_common_factor + 1):
+            if nominator % i == 0 and denominator % i == 0:
+                factor = i
+        self.nominator = nominator // factor
+        self.denominator = denominator // factor
+
+    def print_decimal(self):
+        return (str(self.nominator) + '/' + str(self.denominator))
+
+    def print_fraction(self):
+        return (self.nominator / self.denominator)
+
+    def LCD(self, n1, n2):
+        lcd = max(n1, n2)
+        while not(lcd % n1 == 0 and lcd % n2 == 0):
+            lcd += 1
+        return lcd
+
+    def __add__(self, other):
+        if isinstance(other, Rational):
+            lcd = self.LCD(self.denominator, other.denominator)
+
+            nominator1 = int(self.nominator * lcd / self.denominator)
+            nominator2 = int(other.nominator * lcd / other.denominator)
+            return Rational(nominator1 + nominator2, lcd)
+        else:
+            raise Exception("other must be of type Rational")
+
+    def __sub__(self, other):
+        if isinstance(other, Rational):
+            lcd = self.LCD(self.denominator, other.denominator)
+
+            nominator1 = int(self.nominator * lcd / self.denominator)
+            nominator2 = int(other.nominator * lcd / other.denominator)
+            return Rational(nominator1 - nominator2, lcd)
+        else:
+            raise Exception("other must be of type Rational")
+
+    def __mul__(self, other):
+        if isinstance(other, Rational):
+            return Rational(self.nominator * other.nominator, self.denominator * other.denominator)
+        else:
+            raise Exception("other must be of type Rational")
+
+    def __truediv__(self, other):
+        if isinstance(other, Rational):
+            return Rational(self.nominator * other.denominator, self.denominator * other.nominator)
+        else:
+            raise Exception("other must be of type Rational")
+
+    def __eq__(self, other):
+        if isinstance(other, Rational):
+            return self.nominator == other.nominator and self.denominator == other.denominator
+        else:
+            raise Exception("other must be of type Rational")
